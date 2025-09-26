@@ -36,3 +36,5 @@ cmd-buildpack-detect-detect() {
 		cmd-buildpack-detect-help "$CMD"
 	fi
 }
+
+cmd-buildpack-detect-detect "$@"
