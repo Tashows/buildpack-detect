@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
-source "$PLUGIN_AVAILABLE_PATH/buildpack-detect/subcommands/detect"
+source "$PLUGIN_AVAILABLE_PATH/buildpack-detect/help-functions"
 
-cmd-buildpack-detect "$@"
+# if there is no subcommand, show help
+if [[ -z "$2" ]]; then
+	cmd-buildpack-detect-help
+	exit 0
+else
+	cmd-buildpack-detect-detect "$@"
+fi

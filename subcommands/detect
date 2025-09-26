@@ -3,38 +3,4 @@ set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
 source "$PLUGIN_AVAILABLE_PATH/buildpack-detect/help-functions"
 
-cmd-buildpack-detect-detect() {
-	declare desc="run buildpack detection on an app, without deploying it."
-	declare CMD="$1"
-	local plugin_name="buildpack-detect"
-	local plugin_description="Run buildpack detection on an app, without deploying it."
-	if [[ "$CMD" == "${plugin_name}:detect" || "$CMD" == "${plugin_name}" ]]; then
-		APP="$2"
-
-		if [[ -z "$APP" ]]; then
-			echo "Usage: dokku buildpack-detect:detect <app>"
-			exit 1
-		fi
-
-		APP_ROOT="/home/dokku/$APP"
-
-		if [[ ! -d "$APP_ROOT" ]]; then
-			echo "App $APP does not exist"
-			exit 1
-		fi
-
-		if [[ "$3" == "--json-output" ]]; then
-			BUILDPACK_DETECT_OUTPUT="json"
-		fi
-
-		docker run --rm \
-			-v "$APP_ROOT:/tmp/app" \
-			${BUILDPACK_DETECT_OUTPUT:+-e BUILDPACK_DETECT_OUTPUT="$BUILDPACK_DETECT_OUTPUT"} \
-			gliderlabs/herokuish \
-			/bin/herokuish buildpack detect /tmp/app
-	else
-		cmd-buildpack-detect-help "$CMD"
-	fi
-}
-
 cmd-buildpack-detect-detect "$@"
