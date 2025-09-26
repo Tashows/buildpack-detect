@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -eo pipefail
+[[ $DOKKU_TRACE ]] && set -x
+
+cmd-buildpack-detect-help() {
+  declare desc="help command"
+  declare CMD="$1"
+  local plugin_name="buildpack-detect"
+  local plugin_description="Run buildpack detection on an app, without deploying it."
+
+  if [[ "$CMD" == "${plugin_name}:help" ]]; then
+    fn-help-content | sort | column -c2 -t -s,
+  elif [[ $(ps -o command= $PPID) == *"--all"* ]]; then
+    fn-help-content
+  else
+    cat <<help_desc
+    $plugin_name, $plugin_description
+help_desc
+  fi
+}
+
+fn-help-content() {
+  declare desc="return help content"
+  cat <<help_content
+    buildpack-detect(:detect) <app> (--json-output), Run buildpack detection on an app, without deploying it.
+    buildpack-detect:help, Show help for the buildpack-detect plugin
+help_content
+}

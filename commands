@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+
+source "$PLUGIN_AVAILABLE_PATH/buildpack-detect/help-functions"
+[[ " help buildpack-detect:help " == *" $1 "* ]] || exit "$DOKKU_NOT_IMPLEMENTED_EXIT"
+
+# allow usage like `dokku buildpack-detect <app>` and `dokku buildpack-detect:detect <app>`
+case "$1" in
+  "" | "help" | "buildpack-detect:help")
+  	cmd-buildpack-detect-help
+  	;;
+  *)
+    exit "$DOKKU_NOT_IMPLEMENTED_EXIT"
+    ;;
+
+esac
